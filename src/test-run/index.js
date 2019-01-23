@@ -51,9 +51,9 @@ const MAX_RESPONSE_DELAY              = 3000;
 const ALL_DRIVER_TASKS_ADDED_TO_QUEUE_EVENT = 'all-driver-tasks-added-to-queue';
 
 export default class TestRun extends EventEmitter {
-    constructor (test, browserConnection, screenshotCapturer, globalWarningLog, opts) {
+    constructor (test, browserConnection, screenshotCapturer, globalWarningLog, opts, context) {
         super();
-
+        this.context = context;
         this[testRunMarker] = true;
 
         this.warningLog = new WarningLog(globalWarningLog);

@@ -34,8 +34,10 @@ class Quarantine {
 }
 
 export default class TestRunController extends AsyncEventEmitter {
-    constructor (test, index, proxy, screenshots, warningLog, fixtureHookController, opts) {
+    constructor (test, index, proxy, screenshots, warningLog, fixtureHookController, opts, context) {
         super();
+
+        this.context = context;
 
         this.test  = test;
         this.index = index;
@@ -68,7 +70,7 @@ export default class TestRunController extends AsyncEventEmitter {
         const screenshotCapturer = this.screenshots.createCapturerFor(this.test, this.index, this.quarantine, connection, this.warningLog);
         const TestRunCtor        = this.TestRunCtor;
 
-        this.testRun = new TestRunCtor(this.test, connection, screenshotCapturer, this.warningLog, this.opts);
+        this.testRun = new TestRunCtor(this.test, connection, screenshotCapturer, this.warningLog, this.opts, this.context);
 
         if (this.testRun.addQuarantineInfo)
             this.testRun.addQuarantineInfo(this.quarantine);

@@ -133,13 +133,13 @@ export default class Runner extends EventEmitter {
         return this._getFailedTestCount(task, reporters[0]);
     }
 
-    _createTask (tests, browserConnectionGroups, proxy, opts) {
-        return new Task(tests, browserConnectionGroups, proxy, opts);
+    _createTask (tests, browserConnectionGroups, proxy, opts, context) {
+        return new Task(tests, browserConnectionGroups, proxy, opts, context);
     }
 
-    _runTask (reporterPlugins, browserSet, tests, testedApp) {
+    _runTask (reporterPlugins, browserSet, tests, testedApp, context) {
         let completed           = false;
-        const task              = this._createTask(tests, browserSet.browserConnectionGroups, this.proxy, this.configuration.getOptions());
+        const task              = this._createTask(tests, browserSet.browserConnectionGroups, this.proxy, this.configuration.getOptions(), context);
         const reporters         = reporterPlugins.map(reporter => new Reporter(reporter.plugin, task, reporter.outStream));
         const completionPromise = this._getTaskResult(task, browserSet, reporters, testedApp);
 
@@ -344,7 +344,7 @@ export default class Runner extends EventEmitter {
         return this;
     }
 
-    run (options = {}) {
+    run (options = {}, context) {
         this.apiMethodWasCalled.reset();
 
         const {
@@ -391,7 +391,7 @@ export default class Runner extends EventEmitter {
             .then(({ reporterPlugins, browserSet, tests, testedApp }) => {
                 this.emit('done-bootstrapping');
 
-                return this._runTask(reporterPlugins, browserSet, tests, testedApp);
+                return this._runTask(reporterPlugins, browserSet, tests, testedApp, context);
             });
 
         return this._createCancelablePromise(runTaskPromise);

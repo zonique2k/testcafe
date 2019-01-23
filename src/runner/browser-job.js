@@ -8,11 +8,11 @@ import RESULT from './browser-job-result';
 
 // Browser job
 export default class BrowserJob extends AsyncEventEmitter {
-    constructor (tests, browserConnections, proxy, screenshots, warningLog, fixtureHookController, opts) {
+    constructor (tests, browserConnections, proxy, screenshots, warningLog, fixtureHookController, opts, context) {
         super();
 
         this.started = false;
-
+        this.context               = context;
         this.total                 = 0;
         this.passed                = 0;
         this.opts                  = opts;
@@ -34,7 +34,7 @@ export default class BrowserJob extends AsyncEventEmitter {
 
     _createTestRunController (test, index) {
         const testRunController = new TestRunController(test, index + 1, this.proxy, this.screenshots, this.warningLog,
-            this.fixtureHookController, this.opts);
+            this.fixtureHookController, this.opts, this.context);
 
         testRunController.on('test-run-start', () => this.emit('test-run-start', testRunController.testRun));
         testRunController.on('test-run-restart', () => this._onTestRunRestart(testRunController));

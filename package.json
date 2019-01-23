@@ -49,6 +49,7 @@
     "await"
   ],
   "scripts": {
+    "build": "gulp build",
     "test": "gulp travis",
     "publish-please": "del-cli package-lock.json node_modules && npm i && publish-please",
     "prepublish": "publish-please guard"
